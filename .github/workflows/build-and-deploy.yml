@@ -57,7 +57,7 @@ jobs:
 
     - name: List files in root directory 
       run: |
-        Get-ChilItem -Path . | ForEach-Object {{ Write-Output $_.Name }
+        Get-ChilItem -Path . | ForEach-Object { Write-Output $_.Name }
       shell: pwsh
    
     
