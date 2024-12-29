@@ -36,5 +36,5 @@ jobs:
       app-name: appsvc1
       deployment-slot: development
 
-    secrets: 
-      azure-pipeline: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+    secrets:
+      azure-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
