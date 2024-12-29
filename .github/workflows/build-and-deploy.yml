@@ -4,35 +4,32 @@ on:
   push:
     branches:
       - main
-
   workflow_dispatch:
- 
+
 jobs:
   build-job:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up .Net Core
-      uses: actions/setup-dotnet@v4.2.0
-      with:
-        dotnet-version: '8.x'
+      - name: Set up .Net Core
+        uses: actions/setup-dotnet@v4.2.0
+        with:
+          dotnet-version: '8.x'
 
-    - name: Build Code
-      run: dotnet build --configuration Release
+      - name: Build Code
+        run: dotnet build --configuration Release
 
-    - name: Publish Code
-      run: dotnet publish -c Release --property:PublishDir="${{ env.DOTNET_ROOT }}\myapp"
-    
-    # Upload a build artifact that can be used by subsequent workflow steps
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4.5.0
-      with:
-        # Artifact name
-        name: .net-app
-        path: ${{ env.DOTNET_ROOT }}\myapp
+      - name: Publish Code
+        run: dotnet publish -c Release --property:PublishDir="${{ env.DOTNET_ROOT }}\myapp"
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}\myapp
 
   deploy-job:
     runs-on: windows-latest
@@ -43,26 +40,18 @@ jobs:
       deployment-slot: production
 
     steps:
-    # Download a build artifact that was previously uploaded in the workflow by the upload-artifact action
-    - name: Download Artifact from build job
-      uses: actions/download-artifact@v4.1.8
-      with:
-        name: ${{ env.package-name }}
+      - name: Download Artifact from build job
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ env.package-name }}
 
-    - name: Secret Information 
-      run: echo "Value of secret matches ${{ secrets.AZURE_PUBLISH_PROFILE == 'Placeholder' }}"
+      - name: Secret Information 
+        run: echo "Value of secret matches ${{ secrets.AZURE_PUBLISH_PROFILE == 'Placeholder' }}"
 
-    - name: Print name of App Service to deploy to
-      run: echo "App will be deployed on ${{ env.app-name }}"
+      - name: Print name of App Service to deploy to
+        run: echo "App will be deployed on ${{ env.app-name }}"
 
-    - name: List files in root directory 
-      run: |
-        Get-ChilItem -Path . | ForEach-Object { Write-Output $_.Name }
-      shell: pwsh
-   
-    
-
-      
-        
-
-        
+      - name: List files in root directory 
+        run: |
+          Get-ChildItem -Path . | ForEach-Object { Write-Output $_.Name }
+        shell: pwsh
