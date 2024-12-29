@@ -9,7 +9,7 @@ on:
  
 jobs:
   build-job:
-    runs-on: windows-lates
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
