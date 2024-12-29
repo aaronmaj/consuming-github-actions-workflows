@@ -1,0 +1,43 @@
+name: Build and Call Reusable Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-job:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up .Net Core
+        uses: actions/setup-dotnet@v4.2.0
+        with:
+          dotnet-version: '8.x'
+
+      - name: Build Code
+        run: dotnet build --configuration Release
+
+      - name: Publish Code
+        run: dotnet publish -c Release --property:PublishDir="${{ env.DOTNET_ROOT }}\myapp"
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}\myapp
+
+  deploy-job:
+    needs: build-job
+    uses: ./.github/workflows/deploy.yml
+    with:
+      package-name: .net-app
+      app-name: appsvc1
+      deployment-slot: development
+
+    secrets: 
+      azure-pipeline: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+     
+    
+  
