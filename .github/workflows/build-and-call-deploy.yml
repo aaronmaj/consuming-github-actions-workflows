@@ -38,6 +38,3 @@ jobs:
 
     secrets: 
       azure-pipeline: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-     
-    
-  
