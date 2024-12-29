@@ -30,8 +30,8 @@ jobs:
 
   deploy-job:
     needs: build-job
-    #uses: ./.github/workflows/deploy.yml
-    uses: aaronmaj/github-actions/.github/workflows/reusable-deploy-shared-repo.yml@main
+    uses: ./.github/workflows/deploy.yml
+    #uses: aaronmaj/github-actions/.github/workflows/reusable-deploy-shared-repo.yml@main
     with:
       package-name: .net-app
       app-name: appsvc1
