@@ -1,0 +1,42 @@
+name: Issues Workflow
+on:
+  issues:
+    types: [opened, assigned, labeled, closed]
+  workflow_dispatch:
+
+jobs:
+  comment-on-issue:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/github-script@v7
+      id: issue_script
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const issue_number = context.issue.number;
+          console.log(`Issue Number: ${issue_number}`);
+              
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+              
+          // lookup issue info
+          const issue = await github.issues.get({
+           owner,
+           repo,
+           issue_number
+          });
+          
+          console.log(`issue: ${issue}`);
+          
+          // add a comment to the issue
+          
+          const comment = await github.issues.createComment({
+           owner,
+           repo,
+           issue_number,
+           body: 'Thanks for your contribution!'
+          });
+              
+          
+              
