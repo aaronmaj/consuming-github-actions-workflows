@@ -19,37 +19,37 @@ jobs:
           const issue_number = context.issue.number;
           console.log(`Issue Number: ${issue_number}`);
               
-          const owner = context.repo.owner;
-          const repo = context.repo.repo;
+          //const owner = context.repo.owner;
+          //const repo = context.repo.repo;
               
           // lookup issue info
-          const issue = await github.issues.get({
-           repo,
-           owner,
-           issue_number
-          });
+          const issue = await github.rest.issues.get({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+         });
           
           console.log(`issue: ${issue}`);
           
           // add a comment to the issue
           
-          const comment = await github.issues.createComment({
-           repo,
-           owner,
-           issue_number,
-           body: 'Thanks for your contribution!'
-          });
+          const comment = await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            });
           
           console.log(`comment id: ${comment.data.id}`);
           console.log(comment.data);
           
           // add a label to the issue
-            const label = await github.issues.addLabels({
-             owner,
-             repo,
-             issue_number,
-             labels: ['todo-review']
-            });
+            const label = await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['todo-review']
+            })
           
             // Make comment id available to subsequent steps
             return comment.data.id;
