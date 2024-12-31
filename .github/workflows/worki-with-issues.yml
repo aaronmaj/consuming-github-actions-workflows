@@ -34,8 +34,8 @@ jobs:
           // add a comment to the issue
           
           const comment = await github.issues.createComment({
-           owner,
            repo,
+           owner,
            issue_number,
            body: 'Thanks for your contribution!'
           });
