@@ -37,6 +37,25 @@ jobs:
            issue_number,
            body: 'Thanks for your contribution!'
           });
-              
+          
+          console.log(`comment id: ${comment.data.id}`);
+          console.log(comment.data);
+          
+          // add a label to the issue
+            const label = await github.issues.addLabels({
+             owner,
+             repo,
+             issue_number,
+             labels: ['todo-review']
+            });
+          
+            // Make comment id available to subsequent steps
+            return comment.data.id;
+
+    - name: Get the comment id
+      run: echo "Comment id is ${{ steps.issue_script.outputs.result }}"
+
+
+          
           
               
