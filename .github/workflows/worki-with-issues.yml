@@ -38,21 +38,21 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
-            });
+          });
           
           console.log(`comment id: ${comment.data.id}`);
           console.log(comment.data);
           
           // add a label to the issue
-            const label = await github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['todo-review']
-            })
+          const label = await github.rest.issues.addLabels({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['todo-review']
+          });
           
-            // Make comment id available to subsequent steps
-            return comment.data.id;
+          // Make comment id available to subsequent steps
+          return comment.data.id;
 
     - name: Get the comment id
       run: echo "Comment id is ${{ steps.issue_script.outputs.result }}"
