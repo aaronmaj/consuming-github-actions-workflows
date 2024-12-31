@@ -17,7 +17,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issue_number = context.issue.number;
+            const issue_number = context.issue.number || 2;
             console.log(`Issue Number: ${issue_number}`);
             
             const issue = await github.rest.issues.get({
