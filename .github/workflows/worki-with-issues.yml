@@ -7,7 +7,7 @@ on:
 jobs:
   comment-on-issue:
     runs-on: ubuntu-latest
-    permissions:
+    permissions:  # check workflow permissions
         contents: read
         issues: write
     steps:
@@ -24,8 +24,8 @@ jobs:
               
           // lookup issue info
           const issue = await github.issues.get({
-           owner,
            repo,
+           owner,
            issue_number
           });
           
