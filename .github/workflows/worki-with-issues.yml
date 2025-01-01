@@ -2,7 +2,7 @@ name: Issues Workflow
 
 on:
   issues:
-    types: [opened, assigned, labeled, closed]
+    types: [opened, assigned, edited, labeled, closed]
   workflow_dispatch:
 
 jobs:
