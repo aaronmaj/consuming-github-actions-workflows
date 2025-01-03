@@ -34,6 +34,6 @@ jobs:
     steps:
       - run: echo "${{ env.RANDOM_PASSWORD }} / ${{ needs.generate.outputs.RANDOM_PASSWORD }}"
       - run: mysql --version
-      - run: mysql -h mysqlserver -uroot -p${{ needs.generate.outputs.RANDOM_PASSWORD }} -e "SHOW DATABASES;"
+      - run: mysql -h mysqlserver -u root -p${{ needs.generate.outputs.RANDOM_PASSWORD }} -e "SHOW DATABASES;"
       - run: echo "job.service = ${{ job.services }}"
       - run: echo "job.container = ${{ job.container }}"
