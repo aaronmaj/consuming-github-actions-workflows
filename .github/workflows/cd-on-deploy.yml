@@ -1,0 +1,13 @@
+name: cd-on-deploy
+
+on:
+  deployment: # Triggers when a deployment is triggered
+
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Sending slack alerts to the team to get deployment approval"
+      - run: echo "${{ toJSON(github.event) }}"
