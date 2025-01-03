@@ -26,3 +26,19 @@ on:
 
         - run: ./build-push.sh  # Can reuse local build scripts for CI/CD
           working-directory: api
+
+    deploy:
+      runs-on: ubuntu-latest
+      environment:
+        name: production
+      needs: build
+
+      steps:
+        - uses: Azure/login@v2
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        - uses: azure/webapps-deploy@v3
+          with:
+            app-name: gh-actions-web-app
+            images: aaron83/actions-web:latest
+            resource-group: gh-actions
