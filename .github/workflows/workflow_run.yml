@@ -28,7 +28,7 @@ jobs:
       with:
         name: build_output.txt
         run-id: '${{ github.event.workflow_run.id }}'
-        github-token: ${ secrets.GITHUB_TOKEN }
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         repository: '${{ github.event.workflow_run.head_repository.full_name }}'
 
     - name: Check issue number
