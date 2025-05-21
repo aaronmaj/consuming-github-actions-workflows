@@ -55,7 +55,6 @@ jobs:
       - name: Set workflow output
         id: set_output
         run: |
-          echo "comment_id=${{ steps.issue_script.outputs.result }}" >> $GITHUB_OUTPUT
           echo "comment_id=${{ steps.issue_script.outputs.result }}" > build_output.txt
 
       - name: upload artifact
