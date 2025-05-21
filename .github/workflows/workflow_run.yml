@@ -16,7 +16,7 @@ jobs:
         echo "Workflow run ID: ${{ github.event.workflow_run.id }}"
         echo "Workflow name: ${{ github.event.workflow_run.name }}"
         echo "Workflow status: ${{ github.event.workflow_run.conclusion }}"
-        echo "Workflow head repository name: ${{ github.event.workflow_run.head_repository.name }}"
+        echo "Workflow head repository name: ${{ github.event.workflow_run.head_repository.full_name }}"
         echo "Workflow head repository : ${{ github.event.workflow_run.head_repository }}"
         echo "Workflow head branch: ${{ github.event.workflow_run.head_branch }}"
         echo "Workflow head commit: ${{ github.event.workflow_run.head_commit }}"
@@ -29,7 +29,7 @@ jobs:
         name: build_output.txt
         run-id: '${{ github.event.workflow_run.id }}'
         github-token: ${ secrets.GITHUB_TOKEN }
-        repository: '${{ github.event.workflow_run.head_repository }}'
+        repository: '${{ github.event.workflow_run.head_repository.full_name }}'
 
     - name: Check issue number
       id: check-issue-status
