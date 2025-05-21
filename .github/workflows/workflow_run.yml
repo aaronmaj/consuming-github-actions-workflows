@@ -38,7 +38,7 @@ jobs:
         echo "Comment message: ${{ github.event.workflow_run.head_commit.message }}"
         echo "Artifacts downloaded:"
         ls -l
-        BUILD_OUTPUT=$(cat build_output || echo "No build output found")
+        BUILD_OUTPUT=$(cat build_output.txt || echo "No build output found")
         echo "comment_id: $BUILD_OUTPUT" >> $GITHUB_OUTPUT
 
     - name: Check comment id
