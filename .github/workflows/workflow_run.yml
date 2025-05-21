@@ -4,11 +4,15 @@ on:
     workflows: ["Issues Workflow"]
     types:
       - completed
-
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: true
 
 jobs:
   comment-on-issue:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.input.issue_number }}
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
@@ -44,5 +48,7 @@ jobs:
 
     - name: Check comment id
       id: check-comment-id
+      env:
+        issue_number: ${{ steps.check-issue-status.outputs.comment_id || github.event.input.issue_number }}
       run: |
-        echo "Comment id: ${{ steps.check-issue-status.outputs.comment_id }}"
+        echo "Issue number: ${{ env.issue_number }}"
