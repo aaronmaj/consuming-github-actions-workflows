@@ -40,7 +40,7 @@ jobs:
         ls -l
         BUILD_OUTPUT=$(cat build_output.txt || echo "No build output found")
         echo "Build output: $BUILD_OUTPUT"
-        echo "comment_id = $BUILD_OUTPUT" >> $GITHUB_OUTPUT
+        echo "comment_id=$BUILD_OUTPUT" >> $GITHUB_OUTPUT
 
     - name: Check comment id
       id: check-comment-id
