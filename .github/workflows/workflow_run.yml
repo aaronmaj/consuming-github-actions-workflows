@@ -17,5 +17,5 @@ jobs:
       run: |
         echo "Issue status: ${{ github.event.workflow_run.conclusion }}"
         echo "Comment message: ${{ github.event.workflow_run.head_commit.message }}"
-        echo "Issue number: ${{ github.event.workflow_run.output.comment_id }}"
+        echo "Issue number: ${{ github.event.workflow_run.outputs.comment_id }}"
 
