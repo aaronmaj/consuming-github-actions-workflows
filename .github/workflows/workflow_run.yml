@@ -10,12 +10,12 @@ jobs:
   comment-on-issue:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
+    permissions: read-all
     steps:
     - name: Check if the issue was closed
       id: check-issue-status
       run: |
         echo "Issue status: ${{ github.event.workflow_run.conclusion }}"
-        echo "Issue number: ${{ github.event.workflow_run.head_commit.message }}"
-        echo "Issue status: ${{ github.event.workflow_run.output.comment_id }}"
+        echo "Comment message: ${{ github.event.workflow_run.head_commit.message }}"
+        echo "Issue number: ${{ github.event.workflow_run.output.comment_id }}"
 
