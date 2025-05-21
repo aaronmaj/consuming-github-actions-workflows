@@ -51,3 +51,16 @@ jobs:
 
       - name: Get the comment id
         run: echo "Comment id is ${{ steps.issue_script.outputs.result }}"
+
+      - name: Set workflow output
+        id: set_output
+        run: |
+          echo "comment_id=${{ steps.issue_script.outputs.result }}" >> $GITHUB_OUTPUT
+          echo "comment_id=${{ steps.issue_script.outputs.result }}" > build_output.txt
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_output
+          path: build_output.txt
+          retention-days: 1

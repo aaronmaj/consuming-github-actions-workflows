@@ -12,10 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
-    - name: Check if the issue was closed
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build_output.txt
+        run-id: '${{ github.event.workflow_run.id }}'
+        github-token: ${ secrets.GITHUB_TOKEN }
+        repository: '${{ github.repository }}'
+
+    - name: Check issue number
       id: check-issue-status
       run: |
         echo "Issue status: ${{ github.event.workflow_run.conclusion }}"
         echo "Comment message: ${{ github.event.workflow_run.head_commit.message }}"
         echo "Issue number: ${{ github.event.workflow_run.outputs.comment_id }}"
+        BUILD_OUTPUT=$(cat build_output.txt)
+        echo "comment_id: $BUILD_OUTPUT" >> $GITHUB_OUTPUT
 
+    - name: Check comment id
+      id: check-comment-id
+      run: |
+        echo "Comment id: ${{ steps.check-issue-status.outputs.comment_id }}"
