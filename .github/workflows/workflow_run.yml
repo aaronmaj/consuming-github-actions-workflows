@@ -12,6 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
+    - run: |
+        echo "Workflow run ID: ${{ github.event.workflow_run.id }}"
+        echo "Workflow name: ${{ github.event.workflow_run.name }}"
+        echo "Workflow status: ${{ github.event.workflow_run.conclusion }}"
+        echo "Workflow head repository: ${{ github.event.workflow_run.head_repository }}"
+        echo "Workflow head repository: ${{ github.event.workflow_run.head_repository }}"
+        echo "Workflow head branch: ${{ github.event.workflow_run.head_branch }}"
+        echo "Workflow head commit: ${{ github.event.workflow_run.head_commit }}"
+        echo "Workflow event type: ${{ github.event.workflow_run.event }}"
+        echo "Workflow run number: ${{ github.event.workflow_run.run_number }}"
 
     - name: Download artifact
       uses: actions/download-artifact@v4
@@ -19,7 +29,7 @@ jobs:
         name: build_output.txt
         run-id: '${{ github.event.workflow_run.id }}'
         github-token: ${ secrets.GITHUB_TOKEN }
-        repository: '${{ github.repository }}'
+        repository: '${{ github.event.workflow_run.head_repository }}'
 
     - name: Check issue number
       id: check-issue-status
