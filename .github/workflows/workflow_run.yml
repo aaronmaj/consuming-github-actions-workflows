@@ -1,4 +1,5 @@
 name: workflow_run.yml
+run-name: ${{ github.actor }} - ${{ github.event.input.issue_number }} 🚀
 on:
   workflow_run:
     workflows: ["Issues Workflow"]
