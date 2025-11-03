@@ -2,23 +2,108 @@ name: Custom Environment Variables
 
 on:
   workflow_dispatch:
+    inputs:
+      app:
+        description: 'App to deploy'
+        required: true
+        type: choice
+        options:
+          - banking-api
+          - banking-ui
+          - banking-mobile
+      deploy-env:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+env:
+  API_VERSION_DEV: 1.0.0
+  UI_VERSION_DEV: 2.0.0
+  MOBILE_VERSION_DEV: 3.0.0
+
+  API_VERSION_TEST: 0.0.9
+  UI_VERSION_TEST: 1.9.0
+  MOBILE_VERSION_TEST: 2.0.0
+
+  API_VERSION_PROD: 0.0.7
+  UI_VERSION_PROD: 1.0.0
+  MOBILE_VERSION_PROD: 2.0.0
 
 jobs:
+  init-envs:
+    runs-on: ubuntu-latest
+    outputs:
+      app-version: ${{ steps.set-vars.outputs.app-version }}
+      deploy-env: ${{ steps.set-vars.outputs.deploy-env }}
+      dockerhub-username: ${{ steps.set-vars.outputs.dockerhub-username }}
+      azure_publish_profile: ${{ steps.set-vars.AZURE_PUBLISH_PROFILE }}
+    steps:
+      - name: Set environment variables
+        id: set-vars
+        run: |
+          # Map app names to prefixes
+          case "${{ github.event.inputs.app }}" in
+            banking-api)    APP_PREFIX="API" ;;
+            banking-ui)     APP_PREFIX="UI" ;;
+            banking-mobile) APP_PREFIX="MOBILE" ;;
+          esac
+          
+          # Map environment to suffix
+          ENV_SUFFIX=$(echo "${{ github.event.inputs.deploy-env }}" | tr '[:lower:]' '[:upper:]')
+          
+          # Construct variable name and get value
+          VERSION_VAR="${APP_PREFIX}_VERSION_${ENV_SUFFIX}"
+          APP_VERSION=$(eval echo "\$${VERSION_VAR}")
+          
+          # Set outputs
+          echo "app-version=${APP_VERSION}" >> $GITHUB_OUTPUT
+          echo "deploy-env=${{ github.event.inputs.deploy-env }}" >> $GITHUB_OUTPUT
+          echo "dockerhub-username=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
+          echo "azure_publish_profile=${{ secrets.AZURE_PUBLISH_PROFILE }}">> $GITHUB_OUTPUT
+
+      - name: Display initialized values
+        run: |
+          echo "Selected App: ${{ github.event.inputs.app }}"
+          echo "App Version: ${{ steps.set-vars.outputs.app-version }}"
+          echo "Deploy Environment: ${{ steps.set-vars.outputs.deploy-env }}"
+          echo "DockerHub Username: ${{ steps.set-vars.outputs.dockerhub-username }}"
+          echo "Azure Publish Profile: ${{ steps.set-vars.outputs.azure_publish_profile }}"
+
   build:
     runs-on: ubuntu-latest
-
+    needs: init-envs
     steps:
-      - name: Write value to $GITHUB_ENV file
+      - name: Display environment values
+        run: |
+          echo "App: ${{ github.event.inputs.app }}"
+          echo "APP_VERSION: ${{ needs.init-envs.outputs.app-version }}"
+          echo "DEPLOY_ENV: ${{ needs.init-envs.outputs.deploy-env }}"
+          echo "DOCKERHUB_USERNAME: ${{ needs.init-envs.outputs.dockerhub-username }}"
+          echo "AZURE_PUBLISH_PROFILE: ${{ needs.init-envs.outputs.azure_publish_profile }}"
+
+      - name: Set local environment variable
         run: echo "VAR_1=value set from first step" >> $GITHUB_ENV
 
-      - name: Display value of VAR_1
+      - name: Display local variable
         run: echo "Value of VAR_1 is $VAR_1"
 
-      - name: Set color
+      - name: Set color output
         id: color-selector
         run: echo "SELECTED_COLOR=blue" >> $GITHUB_OUTPUT
 
-      - name: Get color
+      - name: Get color output
         env:
           SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
         run: echo "The selected color is $SELECTED_COLOR"
+
+      - name: Build application
+        env:
+          APP_VERSION: ${{ needs.init-envs.outputs.app-version }}
+          DEPLOY_ENV: ${{ needs.init-envs.outputs.deploy-env }}
+        run: |
+          echo "Building ${{ github.event.inputs.app }} version $APP_VERSION for $DEPLOY_ENV environment"
+          # Add your actual build commands here
