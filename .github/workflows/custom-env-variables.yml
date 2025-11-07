@@ -51,13 +51,6 @@ jobs:
         shell: bash
         run: |
           # Map app names to prefixes
-          
-#          case "${{ github.event.inputs.app }}" in
-#            banking-api)    APP_PREFIX="API" ;;
-#            banking-ui)     APP_PREFIX="UI" ;;
-#            banking-mobile) APP_PREFIX="MOBILE" ;;
-#          esac
-          
           declare -A APP_PREFIX_MAP=(
             ["banking-api"]="API"
             ["banking-ui"]="UI"
