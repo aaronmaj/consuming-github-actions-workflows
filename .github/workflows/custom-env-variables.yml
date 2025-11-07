@@ -46,7 +46,7 @@ jobs:
       app-prefix: ${{ steps.set-vars.outputs.app-prefix }}
       app-endpoint-url: ${{ steps.set-vars.outputs.app-endpoint-url }}
       dockerhub-username: ${{ steps.set-vars.outputs.dockerhub-username }}
-      azure_publish_profile: ${{ steps.set-vars.AZURE_PUBLISH_PROFILE }}
+      azure_publish_profile: ${{ steps.set-vars.azure_publish_profile }}
     steps:
       - name: Set environment variables
         id: set-vars
