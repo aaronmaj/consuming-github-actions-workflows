@@ -43,6 +43,8 @@ jobs:
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
       deploy-env: ${{ steps.set-vars.outputs.deploy-env }}
+      app-prefix: ${{ steps.set-vars.outputs.app-prefix }}
+      app-endpoint-url: ${{ steps.set-vars.outputs.app-endpoint-url }}
       dockerhub-username: ${{ steps.set-vars.outputs.dockerhub-username }}
       azure_publish_profile: ${{ steps.set-vars.AZURE_PUBLISH_PROFILE }}
     steps:
@@ -94,14 +96,23 @@ jobs:
           echo "deploy-env=${{ github.event.inputs.deploy-env }}" >> $GITHUB_OUTPUT
           echo "dockerhub-username=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
           echo "azure_publish_profile=${{ secrets.AZURE_PUBLISH_PROFILE }}">> $GITHUB_OUTPUT
+          
+          # Set outputs to GITHUB_ENV
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "APP_PREFIX=${APP_PREFIX_MAP[$app]}" >> $GITHUB_ENV
+          echo "APP_ENDPOINT_URL=${APP_ENDPOINT_URL_MAP[$app]}" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=${{ github.event.inputs.deploy-env }}" >> $GITHUB_ENV
+          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
+          echo "AZURE_PUBLISH_PROFILE=${{ secrets.AZURE_PUBLISH_PROFILE }}" >> $GITHUB_ENV
 
       - name: Display initialized values
         run: |
           echo "Selected App: ${{ github.event.inputs.app }}"
-          echo "App Version: ${{ steps.set-vars.outputs.app-version }}"
-          echo "Deploy Environment: ${{ steps.set-vars.outputs.deploy-env }}"
-          echo "DockerHub Username: ${{ steps.set-vars.outputs.dockerhub-username }}"
-          echo "Azure Publish Profile: ${{ steps.set-vars.outputs.azure_publish_profile }}"
+          echo "App Version: ${{ env.APP_VERSION }}"
+          echo "App Endpoint URL: ${{ env.API_ENDPOINT_URL }}"
+          echo "Deploy Environment: ${{ env.DEPLOY_ENV }}"
+          echo "DockerHub Username: ${{ env.DOCKERHUB_USERNAME }}"
+          echo "Azure Publish Profile: ${{ env.AZURE_PUBLISH_PROFILE }}"
 
   build:
     runs-on: ubuntu-latest
