@@ -52,11 +52,11 @@ jobs:
         run: |
           # Map app names to prefixes
           
-          case "${{ github.event.inputs.app }}" in
-            banking-api)    APP_PREFIX="API" ;;
-            banking-ui)     APP_PREFIX="UI" ;;
-            banking-mobile) APP_PREFIX="MOBILE" ;;
-          esac
+#          case "${{ github.event.inputs.app }}" in
+#            banking-api)    APP_PREFIX="API" ;;
+#            banking-ui)     APP_PREFIX="UI" ;;
+#            banking-mobile) APP_PREFIX="MOBILE" ;;
+#          esac
           
           declare -A APP_PREFIX_MAP=(
             ["banking-api"]="API"
@@ -81,9 +81,8 @@ jobs:
           VERSION_VAR="${APP_PREFIX_MAP[${{ github.event.inputs.app }}]}_VERSION_${ENV_SUFFIX}"
           APP_VERSION=$(eval echo "\$${VERSION_VAR}")
           
-          # Set app version
-          app-version=$APP_VERSION
-          echo "App version is $app-version"
+          # Display values for debugging
+          echo "App version is $APP_VERSION"
           echo "App prefix is ${APP_PREFIX_MAP[${{ github.event.inputs.app }}]}"
           echo "App endpoint URL is ${APP_ENDPOINT_URL_MAP[${{ github.event.inputs.app }}]}"
           echo "Deploy environment is ${{ github.event.inputs.deploy-env }}"
@@ -96,7 +95,7 @@ jobs:
           fi
           
           # Set outputs
-          echo "app-version=$(printenv ${APP_VERSION_MAP[$app]})" >> $GITHUB_OUTPUT
+          echo "app-version=$APP_VERSION" >> $GITHUB_OUTPUT
           echo "app-prefix=$(printenv ${APP_PREFIX_MAP[$app]})" >> $GITHUB_OUTPUT
           echo "app-endpoint-url=$(printenv ${APP_ENDPOINT_URL_MAP[$app]})" >> $GITHUB_OUTPUT
           echo "deploy-env=${{ github.event.inputs.deploy-env }}" >> $GITHUB_OUTPUT
