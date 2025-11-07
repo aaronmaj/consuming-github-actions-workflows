@@ -51,23 +51,38 @@ jobs:
         shell: bash
         run: |
           # Map app names to prefixes
-          declare -A APP_PREFIX_MAP=()=(
+          
+          case "${{ github.event.inputs.app }}" in
+            banking-api)    APP_PREFIX="API" ;;
+            banking-ui)     APP_PREFIX="UI" ;;
+            banking-mobile) APP_PREFIX="MOBILE" ;;
+          esac
+          
+          declare -A APP_PREFIX_MAP=(
             ["banking-api"]="API"
             ["banking-ui"]="UI"
             ["banking-mobile"]="MOBILE"
           )
-          declare -A APP_VERSION_MAP=()=(
+          declare -A APP_VERSION_MAP=(
             ["banking-api"]="${{ env.API_VERSION_DEV }}"
             ["banking-ui"]="${{ env.UI_VERSION_DEV }}"
             ["banking-mobile"]="${{ env.MOBILE_VERSION_DEV }}"
           )
-          declare -A APP_ENDPOINT_URL_MAP=()=(
+          declare -A APP_ENDPOINT_URL_MAP=(
             ["banking-api"]="${{ env.API_ENDPOINT_URL }}"
             ["banking-ui"]="${{ env.UI_ENDPOINT_URL }}"
             ["banking-mobile"]="${{ env.MOBILE_ENDPOINT_URL }}"
           )
+          
+          # Map environment to suffix
+          ENV_SUFFIX=$(echo "${{ github.event.inputs.deploy-env }}" | tr '[:lower:]' '[:upper:]')
+          
+          # Construct variable name and get value
+          VERSION_VAR="${APP_PREFIX_MAP[${{ github.event.inputs.app }}]}_VERSION_${ENV_SUFFIX}"
+          APP_VERSION=$(eval echo "\$${VERSION_VAR}")
+          
           # Set app version
-          app-version=${APP_VERSION_MAP[${{ github.event.inputs.app }}]}
+          app-version=$APP_VERSION
           echo "App version is $app-version"
           echo "App prefix is ${APP_PREFIX_MAP[${{ github.event.inputs.app }}]}"
           echo "App endpoint URL is ${APP_ENDPOINT_URL_MAP[${{ github.event.inputs.app }}]}"
