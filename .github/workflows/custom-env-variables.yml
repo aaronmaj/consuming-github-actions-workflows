@@ -65,10 +65,10 @@ jobs:
           )
           declare -A APP_ENDPOINT_URL_MAP=(
             ["banking-api"]=API_ENDPOINT_URL
-            ["banking-ui"]="UI_ENDPOINT_URL
+            ["banking-ui"]=UI_ENDPOINT_URL
             ["banking-mobile"]=MOBILE_ENDPOINT_URL
           )
-          
+
           # Map environment to suffix
           ENV_SUFFIX=$(echo "${{ github.event.inputs.deploy-env }}" | tr '[:lower:]' '[:upper:]')
           
