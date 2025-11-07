@@ -64,9 +64,9 @@ jobs:
             ["banking-mobile"]="${{ env.MOBILE_VERSION_DEV }}"
           )
           declare -A APP_ENDPOINT_URL_MAP=(
-            ["banking-api"]="${{ env.API_ENDPOINT_URL }}"
-            ["banking-ui"]="${{ env.UI_ENDPOINT_URL }}"
-            ["banking-mobile"]="${{ env.MOBILE_ENDPOINT_URL }}"
+            ["banking-api"]=API_ENDPOINT_URL
+            ["banking-ui"]="UI_ENDPOINT_URL
+            ["banking-mobile"]=MOBILE_ENDPOINT_URL
           )
           
           # Map environment to suffix
@@ -79,7 +79,7 @@ jobs:
           # Display values for debugging
           echo "App version is $APP_VERSION"
           echo "App prefix is ${APP_PREFIX_MAP[${{ github.event.inputs.app }}]}"
-          echo "App endpoint URL is ${APP_ENDPOINT_URL_MAP[${{ github.event.inputs.app }}]}"
+          echo "App endpoint URL is $(printenv ${APP_ENDPOINT_URL_MAP[${{ github.event.inputs.app }}]})"
           echo "Deploy environment is ${{ github.event.inputs.deploy-env }}"
           
           app="${{ github.event.inputs.app }}"
@@ -100,7 +100,7 @@ jobs:
           # Set outputs to GITHUB_ENV
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
           echo "APP_PREFIX=${APP_PREFIX_MAP[$app]}" >> $GITHUB_ENV
-          echo "APP_ENDPOINT_URL=${APP_ENDPOINT_URL_MAP[$app]}" >> $GITHUB_ENV
+          echo "APP_ENDPOINT_URL=$(printenv ${APP_ENDPOINT_URL_MAP[$app]})" >> $GITHUB_ENV
           echo "DEPLOY_ENV=${{ github.event.inputs.deploy-env }}" >> $GITHUB_ENV
           echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
           echo "AZURE_PUBLISH_PROFILE=${{ secrets.AZURE_PUBLISH_PROFILE }}" >> $GITHUB_ENV
