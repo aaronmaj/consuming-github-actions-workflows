@@ -92,7 +92,7 @@ jobs:
           # Set outputs
           echo "app-version=$APP_VERSION" >> $GITHUB_OUTPUT
           echo "app-prefix=${APP_PREFIX_MAP[$app]}" >> $GITHUB_OUTPUT
-          echo "app-endpoint-url=${APP_ENDPOINT_URL_MAP[$app]}" >> $GITHUB_OUTPUT
+          echo "app-endpoint-url=$(printenv ${APP_ENDPOINT_URL_MAP[$app]})" >> $GITHUB_OUTPUT
           echo "deploy-env=${{ github.event.inputs.deploy-env }}" >> $GITHUB_OUTPUT
           echo "dockerhub-username=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
           echo "azure_publish_profile=${{ secrets.AZURE_PUBLISH_PROFILE }}">> $GITHUB_OUTPUT
