@@ -115,7 +115,7 @@ jobs:
           echo "Azure Publish Profile: ${{ env.AZURE_PUBLISH_PROFILE }}"
 
           echo "Show outputs variables"
-          echo " app-version: ${{ steps.set-vars.outputs.app-version }}
+          echo " app-version: ${{ steps.set-vars.outputs.app-version }}"
           echo "deploy-env: ${{ steps.set-vars.outputs.deploy-env }}"
           echo "app-prefix: ${{ steps.set-vars.outputs.app-prefix }}"
           echo "app-endpoint-url: ${{ steps.set-vars.outputs.app-endpoint-url }}"
